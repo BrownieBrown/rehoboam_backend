@@ -1,20 +1,20 @@
-package controller
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"rehoboam/helper"
-	"rehoboam/model"
+	"rehoboam/pkg/models"
+	"rehoboam/pkg/utils/jwt"
 )
 
 func AddEntry(context *gin.Context) {
-	var input model.Entry
+	var input models.Entry
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, err := helper.CurrentUser(context)
+	user, err := jwt.CurrentUser(context)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -34,7 +34,7 @@ func AddEntry(context *gin.Context) {
 }
 
 func GetAllEntries(context *gin.Context) {
-	user, err := helper.CurrentUser(context)
+	user, err := jwt.CurrentUser(context)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

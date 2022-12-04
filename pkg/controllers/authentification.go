@@ -1,21 +1,21 @@
-package controller
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"rehoboam/helper"
-	"rehoboam/model"
+	models2 "rehoboam/pkg/models"
+	"rehoboam/pkg/utils/jwt"
 )
 
 func SignUp(context *gin.Context) {
-	var input model.AuthenticationInput
+	var input models2.AuthenticationInput
 
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user := model.User{
+	user := models2.User{
 		Username: input.Username,
 		Password: input.Password,
 	}
@@ -31,14 +31,14 @@ func SignUp(context *gin.Context) {
 }
 
 func SignIn(context *gin.Context) {
-	var input model.AuthenticationInput
+	var input models2.AuthenticationInput
 
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, err := model.FindUserByUsername(input.Username)
+	user, err := models2.FindUserByUsername(input.Username)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -52,7 +52,7 @@ func SignIn(context *gin.Context) {
 		return
 	}
 
-	jwt, err := helper.GenerateJWT(user)
+	jwt, err := jwt.GenerateJWT(user)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

@@ -1,11 +1,12 @@
-package model
+package models
 
 import (
+	"html"
+	"rehoboam/pkg/database"
+	"strings"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"html"
-	"rehoboam/database"
-	"strings"
 )
 
 type User struct {
@@ -21,6 +22,17 @@ func (user *User) Save() (*User, error) {
 		return &User{}, err
 	}
 	return user, nil
+}
+
+func (user *User) Delete() error {
+	err := database.Connect().Delete(&user).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func (user *User) BeforeSave(*gorm.DB) error {

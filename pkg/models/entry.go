@@ -1,8 +1,9 @@
-package model
+package models
 
 import (
+	"rehoboam/pkg/database"
+
 	"gorm.io/gorm"
-	"rehoboam/database"
 )
 
 type Entry struct {

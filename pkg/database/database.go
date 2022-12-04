@@ -2,9 +2,11 @@ package database
 
 import (
 	"fmt"
+	"os"
+	"rehoboam/pkg/models"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"os"
 )
 
 func Connect() *gorm.DB {
@@ -22,4 +24,10 @@ func Connect() *gorm.DB {
 
 	fmt.Println("Successfully connected to the database")
 	return db
+}
+
+func LoadDatabase() {
+	db := Connect()
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Entry{})
 }
